@@ -33,4 +33,48 @@ describe Oystercard do
         expect { oystercard.top_up(1) }.to raise_error 'exceeded balance'
       end
     end
+    
+    describe '#deduct' do
+      it 'deducts the fare from the balance' do
+        oystercard = Oystercard.new
+        oystercard.deduct(3)
+        expect{ oystercard.deduct(2) }.to change { oystercard.balance }.by(-2)
+      end
+    end
+    
+    describe 'in_journey' do
+      it 'is initially not in a journey' do
+        expect(subject).not_to be_in_journey
+      end
+    end
+    
+        
+    describe '#touch_in' do
+      it 'in_journey will be true when touched in' do
+        oystercard = Oystercard.new
+        oystercard.touch_in
+        expect(oystercard.in_journey).to eq(true)
+        #expect(oystercard).to be_in_journey
+      end
+      it 'if low balance cant touch in' do
+        oystercard = Oystercard.new
+        #min_balance = Oystercard::MIN_BALANCE
+        #ystercard.touch_in
+        @balance = 0
+        #oystercard.deduct(10)
+        expect{ oystercard.touch_in }.to raise_error 'low balance'
+      end
+    end
+    
+    describe '#touch_out' do
+      it 'in_journey will be false when touched out' do
+        oystercard = Oystercard.new
+        oystercard.touch_in
+        oystercard.touch_out
+        #expect(oystercard.in_journey).to eq(false)
+        expect(subject).not_to be_in_journey
+      end
+    end
+    
+    
 end
