@@ -10,6 +10,10 @@ describe Oystercard do
             #oystercard = Oystercard.new
             expect(subject).to be_an_instance_of(Oystercard)
         end
+
+        it 'has an empty list of journeys by default' do
+          expect(subject.journeys).to be_empty
+        end
     end
 
     
@@ -64,23 +68,18 @@ describe Oystercard do
         expect{ subject.touch_in(station) }.to raise_error 'low balance'
       end
       
-      before(:all) do
+      before(:each) do
         oystercard = Oystercard.new
         oystercard.top_up(10)
-        station = double("station")
         oystercard.touch_in(station)
       end
 
 
-      xit 'in_journey will be true when touched in' do
-        #oystercard = Oystercard.new
-        # oystercard.top_up(10)
-        #subject.touch_in(station)
-        #expect(oystercard.in_journey).to eq(true)
+      it 'in_journey will be true when touched in' do
         expect(oystercard).to be_in_journey
       end
       
-      xit 'remembers the entry station for the journey' do
+      it 'remembers the entry station for the journey' do
         # subject.top_up(10)
          #subject.touch_in(station)
         expect(oystercard.entry_station).to eq station
@@ -89,7 +88,7 @@ describe Oystercard do
     end
     
     describe '#touch_out' do
-      it 'in_journey will be false when touched out' do
+      xit 'in_journey will be false when touched out' do
         #oystercard = Oystercard.new
         # oystercard.top_up(10)
          #oystercard.touch_in(station)
@@ -98,7 +97,7 @@ describe Oystercard do
         expect(subject).not_to be_in_journey
       end
       
-      it 'deducts minimum balance from balance' do
+      xit 'deducts minimum balance from balance' do
         # subject.top_up(10)
          #subject.touch_in(station)
         #min_balance = Oystercard::MIN_BALANCE
@@ -114,7 +113,7 @@ describe Oystercard do
       
       it { is_expected.to respond_to(:touch_out).with(1).argument }
       
-      it 'remembers the last station' do
+      xit 'remembers the last station' do
         # subject.top_up(10)
          #subject.touch_in(station)
         expect(subject.touch_out(station)).to eq(station)
@@ -122,19 +121,32 @@ describe Oystercard do
     end
     
     describe 'journeys' do
-      it 'has entry_station as a key' do
+    
+      xit 'has entry_station as a key' do
+        subject.top_up(10)
+        subject.touch_in(station)
         expect(subject.journeys).to have_key(:entry_station)
       end
       
-      it 'has exit_station as a key' do
+      xit 'has exit_station as a key' do
+        subject.top_up(10)
+        subject.touch_in(station)
+        subject.touch_out(station)
         expect(subject.journeys).to have_key(:exit_station)
       end
       
-      it 'stores the entry and exit stations' do
+      xit 'stores the entry and exit stations' do
         subject.top_up(10)
         subject.touch_in(station)
         subject.touch_out(station)
         expect(subject.journeys).to eq({entry_station: station, exit_station: station})
+      end
+
+      it 'returns a whole journey in 1 location' do
+        subject.top_up(10)
+        subject.touch_in(station)
+        subject.touch_out(station)
+        expect(subject.journeys).to eq([{entry_station: station, exit_station: station}])
       end
     end
     

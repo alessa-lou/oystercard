@@ -5,11 +5,7 @@ class Oystercard
     
     def initialize
         @balance = 0
-        @journeys = {
-          entry_station: nil,
-          exit_station: nil
-          
-        }
+        @journeys = []
     end
 
     def top_up(amount)
@@ -31,13 +27,12 @@ class Oystercard
     def touch_in(station)
       fail 'low balance' if @balance <= MIN_BALANCE
       @entry_station = station
-      @journeys[:entry_station] = station
     end
 
     def touch_out(station)
       deduct(1)
+      @journeys << {entry_station: @entry_station, exit_station: station }
       @entry_station = nil
-      @journeys[:exit_station] = station
     end
     
     
