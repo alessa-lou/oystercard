@@ -3,6 +3,7 @@ require 'oystercard'
 describe Oystercard do
   
   let(:oystercard) { Oystercard.new }
+  let(:station) { double("station") }
   
     describe 'initialize' do
         it 'can create an instance of oystercard' do
@@ -53,10 +54,11 @@ describe Oystercard do
     
         
     describe '#touch_in' do
+
       it 'in_journey will be true when touched in' do
         #oystercard = Oystercard.new
         oystercard.top_up(10)
-        oystercard.touch_in
+        oystercard.touch_in(station)
         #expect(oystercard.in_journey).to eq(true)
         expect(oystercard).to be_in_journey
       end
@@ -66,15 +68,21 @@ describe Oystercard do
         #ystercard.touch_in
         #@balance = 0
         #oystercard.deduct(10)
-        expect{ oystercard.touch_in }.to raise_error 'low balance'
+        expect{ oystercard.touch_in(station) }.to raise_error 'low balance'
       end
+      it 'remembers the entry station for the journey' do
+        subject.top_up(10)
+        subject.touch_in(station)
+        expect(subject.entry_station).to eq station
+      end
+
     end
     
     describe '#touch_out' do
       it 'in_journey will be false when touched out' do
         #oystercard = Oystercard.new
         oystercard.top_up(10)
-        oystercard.touch_in
+        oystercard.touch_in(station)
         oystercard.touch_out
         #expect(oystercard.in_journey).to eq(false)
         expect(subject).not_to be_in_journey
@@ -82,12 +90,17 @@ describe Oystercard do
       
       it 'deducts minimum balance from balance' do
         subject.top_up(10)
-        subject.touch_in
+        subject.touch_in(station)
         #min_balance = Oystercard::MIN_BALANCE
         expect{ subject.touch_out }.to change { subject.balance }.by(-1)
       end
         
-      
+      it 'sets entry station to nil' do
+        subject.top_up(10)
+        subject.touch_in(station)
+        subject.touch_out
+        expect(subject.entry_station).to be_nil
+      end
     end
     
     
