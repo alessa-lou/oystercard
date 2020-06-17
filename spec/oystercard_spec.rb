@@ -52,15 +52,16 @@ describe Oystercard do
     describe '#touch_in' do
       it 'in_journey will be true when touched in' do
         oystercard = Oystercard.new
+        oystercard.top_up(10)
         oystercard.touch_in
-        expect(oystercard.in_journey).to eq(true)
-        #expect(oystercard).to be_in_journey
+        #expect(oystercard.in_journey).to eq(true)
+        expect(oystercard).to be_in_journey
       end
       it 'if low balance cant touch in' do
         oystercard = Oystercard.new
         #min_balance = Oystercard::MIN_BALANCE
         #ystercard.touch_in
-        @balance = 0
+        #@balance = 0
         #oystercard.deduct(10)
         expect{ oystercard.touch_in }.to raise_error 'low balance'
       end
@@ -69,6 +70,7 @@ describe Oystercard do
     describe '#touch_out' do
       it 'in_journey will be false when touched out' do
         oystercard = Oystercard.new
+        oystercard.top_up(10)
         oystercard.touch_in
         oystercard.touch_out
         #expect(oystercard.in_journey).to eq(false)
