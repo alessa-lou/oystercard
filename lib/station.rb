@@ -3,12 +3,7 @@ class Station
   attr_reader :name, :zone, :random_station
 
   def initialize
-
-    @random_station = underground_stations.sample
-    @name = random_station[:station_name]
-    @zone = random_station[:station_zone]
-
-    underground_stations = [
+      underground_stations = [
       {:station_name => "Waterloo", :station_zone => 1},
       {:station_name => "Oxford Circus", :station_zone => 1},
       {:station_name => "Elephant&Castle", :station_zone => 2},
@@ -16,6 +11,12 @@ class Station
       {:station_name => "Brixton", :station_zone => 2},
       
       ]
+
+
+    @random_station = underground_stations.sample
+    @name = random_station[:station_name]
+    @zone = random_station[:station_zone]
+
   end
 
 end
